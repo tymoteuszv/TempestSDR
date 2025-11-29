@@ -87,15 +87,27 @@ endif
 # The default plugin file will make sure this is compatible.
 PLUGINS=TSDRPlugin_RawFile
 
+# User-configurable switch for RTL-SDR plugin (must match main makefile)
+BUILD_RTL_SDR ?= 1
+
 ifeq ($(OSNAME),WINDOWS)
 # Windows only plugins
 PLUGINS += TSDRPlugin_SDRPlay TSDRPlugin_ExtIO
 else ifeq ($(OSNAME), LINUX)
 PLUGINS += TSDRPlugin_UHD
+ifeq ($(BUILD_RTL_SDR),1)
+PLUGINS += TSDRPlugin_RTL
+endif
 else ifeq ($(OSNAME), MAC)
 ifeq ($(ARCHNAME), ARM64)
+ifeq ($(BUILD_RTL_SDR),1)
+PLUGINS += TSDRPlugin_RTL
+endif
 else
 PLUGINS += TSDRPlugin_UHD TSDRPlugin_SDRPlay
+ifeq ($(BUILD_RTL_SDR),1)
+PLUGINS += TSDRPlugin_RTL
+endif
 endif
 endif
 
